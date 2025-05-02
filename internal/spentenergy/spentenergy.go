@@ -16,17 +16,16 @@ const (
 )
 
 var (
-	//ErrInvalidArgument = errors.New("invalid argument")
 	ErrZeroOrNegative = errors.New("zero or negative value")
 )
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
-}
-
-func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	if steps <= 0 {
 		return 0, fmt.Errorf("%w: steps must be greater than zero", ErrZeroOrNegative)
+	}
+
+	if weight <= 0 {
+		return 0, fmt.Errorf("%w: weight must be greater than zero", ErrZeroOrNegative)
 	}
 
 	if height <= 0 {
@@ -37,8 +36,25 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 		return 0, fmt.Errorf("%w: duration must be greater than zero", ErrZeroOrNegative)
 	}
 
+	spentCalories := (weight * MeanSpeed(steps, height, duration) * duration.Minutes()) / minInH
+	return spentCalories, nil
+}
+
+func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
+	if steps <= 0 {
+		return 0, fmt.Errorf("%w: steps must be greater than zero", ErrZeroOrNegative)
+	}
+
 	if weight <= 0 {
 		return 0, fmt.Errorf("%w: weight must be greater than zero", ErrZeroOrNegative)
+	}
+
+	if height <= 0 {
+		return 0, fmt.Errorf("%w: height must be greater than zero", ErrZeroOrNegative)
+	}
+
+	if duration <= 0 {
+		return 0, fmt.Errorf("%w: duration must be greater than zero", ErrZeroOrNegative)
 	}
 
 	spentCalories := (weight * MeanSpeed(steps, height, duration) * duration.Minutes()) / minInH
