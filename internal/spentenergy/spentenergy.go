@@ -1,6 +1,9 @@
 package spentenergy
 
 import (
+	"errors"
+	"fmt"
+	"log"
 	"time"
 )
 
@@ -12,6 +15,10 @@ const (
 	walkingCaloriesCoefficient = 0.5  // коэффициент для расчета калорий при ходьбе.
 )
 
+var (
+	ErrZeroOrNegative = errors.New("zero or negative value")
+)
+
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	// TODO: реализовать функцию
 }
@@ -21,7 +28,17 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 }
 
 func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
-	// TODO: реализовать функцию
+	if steps <= 0 {
+		log.Println(ErrZeroOrNegative)
+		return 0.0
+	}
+
+	if duration <= 0 {
+		log.Println(ErrZeroOrNegative)
+		return 0.0
+	}
+
+	return Distance(steps, height) / duration.Hours()
 }
 
 func Distance(steps int, height float64) float64 {
