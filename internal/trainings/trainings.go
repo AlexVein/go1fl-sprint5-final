@@ -15,6 +15,7 @@ var (
 	ErrInvalidArgumentsCount = errors.New("invalid arguments count")
 	ErrInvalidFormat         = errors.New("invalid format")
 	ErrUnknownTrainingType   = errors.New("неизвестный тип тренировки")
+	ErrZeroOrNegativeValue   = errors.New("zero or negative value")
 )
 
 type Training struct {
@@ -35,11 +36,19 @@ func (t *Training) Parse(datastring string) (err error) {
 		return fmt.Errorf("%w: %s", ErrInvalidFormat, data[0])
 	}
 
+	if t.Steps <= 0 {
+		return fmt.Errorf("%w: %d", ErrZeroOrNegativeValue, t.Steps)
+	}
+
 	t.TrainingType = data[1]
 
 	t.Duration, err = time.ParseDuration(data[2])
 	if err != nil {
 		return fmt.Errorf("%w: %s", ErrInvalidFormat, data[2])
+	}
+
+	if t.Duration <= 0 {
+		return fmt.Errorf("%w: %s", ErrZeroOrNegativeValue, t.Duration)
 	}
 
 	return nil
