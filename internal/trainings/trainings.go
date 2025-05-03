@@ -3,6 +3,7 @@ package trainings
 import (
 	"errors"
 	"fmt"
+	"github.com/Yandex-Practicum/tracker/internal/spentenergy"
 	"strconv"
 	"strings"
 	"time"
@@ -13,6 +14,7 @@ import (
 var (
 	ErrInvalidArgumentsCount = errors.New("invalid arguments count")
 	ErrInvalidFormat         = errors.New("invalid format")
+	ErrUnknownTrainingType   = errors.New("неизвестный тип тренировки")
 )
 
 type Training struct {
@@ -44,5 +46,26 @@ func (t *Training) Parse(datastring string) (err error) {
 }
 
 func (t Training) ActionInfo() (string, error) {
-	// TODO: реализовать функцию
+	var result string
+	var distance float64
+	var meanSpeed float64
+	var spentCalories float64
+	var err error
+
+	distance = spentenergy.Distance(t.Steps, t.Height)
+	meanSpeed = spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
+
+	switch t.TrainingType {
+	case "Бег":
+		spentCalories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
+	case "Ходьба":
+		spentCalories, err = spentenergy.WalkingSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
+	default:
+		return "", fmt.Errorf("%w: %s", ErrUnknownTrainingType, t.TrainingType)
+	}
+
+	result = fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",
+		t.TrainingType, t.Duration.Hours(), distance, meanSpeed, spentCalories)
+
+	return result, err
 }
