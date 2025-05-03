@@ -1,7 +1,8 @@
 package actioninfo
 
 type DataParser interface {
-	// TODO: добавить методы
+	Parse(data string) error
+	ActionInfo() (string, error)
 }
 
 func Info(dataset []string, dp DataParser) {
