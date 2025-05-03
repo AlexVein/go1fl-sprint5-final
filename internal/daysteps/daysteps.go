@@ -44,24 +44,15 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 func (ds DaySteps) ActionInfo() (string, error) {
 	var result string
 	var distance float64
-	var walkingSpentCalories float64
-	var runningSpentCalories float64
 	var spentCalories float64
 	var err error
 
 	distance = spentenergy.Distance(ds.Steps, ds.Height)
 
-	walkingSpentCalories, err = spentenergy.WalkingSpentCalories(ds.Steps, ds.Weight, ds.Height, ds.Duration)
+	spentCalories, err = spentenergy.WalkingSpentCalories(ds.Steps, ds.Weight, ds.Height, ds.Duration)
 	if err != nil {
 		return "", err
 	}
-
-	runningSpentCalories, err = spentenergy.RunningSpentCalories(ds.Steps, ds.Weight, ds.Height, ds.Duration)
-	if err != nil {
-		return "", err
-	}
-
-	spentCalories = walkingSpentCalories + runningSpentCalories
 
 	result = fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n",
 		ds.Steps, distance, spentCalories)
