@@ -14,6 +14,7 @@ import (
 var (
 	ErrInvalidArgumentsCount = errors.New("invalid arguments count")
 	ErrInvalidFormat         = errors.New("invalid format")
+	ErrZeroOrNegativeValue   = errors.New("zero or negative value")
 )
 
 type DaySteps struct {
@@ -33,9 +34,17 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 		return fmt.Errorf("%w: %s", ErrInvalidFormat, data[0])
 	}
 
+	if ds.Steps <= 0 {
+		return fmt.Errorf("%w: %d", ErrZeroOrNegativeValue, ds.Steps)
+	}
+
 	ds.Duration, err = time.ParseDuration(data[1])
 	if err != nil {
 		return fmt.Errorf("%w: %s", ErrInvalidFormat, data[1])
+	}
+
+	if ds.Duration <= 0 {
+		return fmt.Errorf("%w: %s", ErrZeroOrNegativeValue, ds.Duration)
 	}
 
 	return nil
