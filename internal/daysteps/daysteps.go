@@ -1,7 +1,15 @@
 package daysteps
 
+import (
+	"time"
+
+	"github.com/Yandex-Practicum/tracker/internal/personaldata"
+)
+
 type DaySteps struct {
-	// TODO: добавить поля
+	Steps    int
+	Duration time.Duration
+	personaldata.Personal
 }
 
 func (ds *DaySteps) Parse(datastring string) (err error) {
