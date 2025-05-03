@@ -64,7 +64,7 @@ func (t Training) ActionInfo() (string, error) {
 		return "", fmt.Errorf("%w: %s", ErrUnknownTrainingType, t.TrainingType)
 	}
 
-	result = fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",
+	result = fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
 		t.TrainingType, t.Duration.Hours(), distance, meanSpeed, spentCalories)
 
 	return result, err
